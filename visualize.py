@@ -31,7 +31,6 @@ class Animation:
         self.ax = self.fig.add_subplot(111, aspect='equal')
         self.fig.subplots_adjust(left=0, right=1, bottom=0, top=1, wspace=None, hspace=None)
         # self.ax.set_frame_on(False)
-
         self.patches = []
         self.task_patches = {}
         self.artists = []
@@ -39,27 +38,24 @@ class Animation:
         self.agent_names = dict()
         self.tasks_picked = []
         # create boundary patch
-
         x_min = -0.5
         y_min = -0.5
         x_max = len(self.my_map) - 0.5
         y_max = len(self.my_map[0]) - 0.5
         plt.xlim(x_min, x_max)
         plt.ylim(y_min, y_max)
-
         self.patches.append(Rectangle((x_min, y_min), x_max - x_min, y_max - y_min, facecolor='none', edgecolor='gray'))
         for i in range(len(self.my_map)):
             for j in range(len(self.my_map[0])):
                 if self.my_map[i][j]:
                     self.patches.append(Rectangle((i - 0.5, j - 0.5), 1, 1, facecolor='gray', edgecolor='gray'))
-
         # create agents:
         self.T = 0
         # draw goals first
         for i, goal in enumerate(self.goals):
             self.patches.append(Rectangle((goal[0] - 0.25, goal[1] - 0.25), 0.5, 0.5, facecolor=Colors[i % len(Colors)],
                                           edgecolor='black', alpha=0.5))
-
+        # intermediate target
         for i, goal in enumerate(self.fin_ta):
             self.patches.append(Rectangle((goal[0] - 0.25, goal[1] - 0.25), 0.5, 0.5, facecolor='pink',
                                           edgecolor='black', alpha=0.5))
@@ -71,7 +67,6 @@ class Animation:
                 'idx': len(self.patches) - 1,
                 'task_id': i
             }
-
             #self.patches.annotate("Task", (task[0] - 0.25, task[1] - 0.25), color='black', weight='bold', fontsize=10, ha='center', va='center')
         for i in range(len(self.paths)):
             name = ''
@@ -95,11 +90,9 @@ class Animation:
             fps=10 * speed,
             dpi=200,
             savefig_kwargs={"pad_inches": 0, "bbox_inches": "tight"})
-
     @staticmethod
     def show():
         plt.show()
-
     def init_func(self):
         for p in self.patches:
             self.ax.add_patch(p)
@@ -111,7 +104,6 @@ class Animation:
             self.patches[v['idx']].set_visible(True)
 
         return self.patches + self.artists
-
     def animate_func(self, t):
         for k in range(len(self.paths)):
             pos = self.get_state(t / 10, self.paths[k])
@@ -140,7 +132,6 @@ class Animation:
                     d2.set_facecolor('red')
                     print("COLLISION! (agent-agent) ({}, {}) at time {}".format(i, j, t/10))
         return self.patches + self.artists
-
     @staticmethod
     def get_state(t, path):
         if int(t) <= 0:
