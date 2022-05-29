@@ -1,10 +1,9 @@
 import time as timer
 import heapq
 import random
-from single_agent_planner import compute_heuristics, get_location, get_sum_of_cost, a_star
+from path_astar_one import compute_heuristics, get_location, get_sum_of_cost, a_star
 
 def detect_collision(path1, path2):
-
     def vertex_collision(t):
         # Returns vertex collision, otherwise returns None
         agent1_curr_loc = get_location(path1, t)
@@ -12,10 +11,8 @@ def detect_collision(path1, path2):
         if agent1_curr_loc == agent2_curr_loc:
             return {'loc': [agent1_curr_loc], 'timestep': t}
         return None
-
     def edge_collision(t):
-        # Returns edge collision (in a way that blames Agent 1 for
-        # the collision), otherwise returns None
+        # Returns edge collision (in a way that blames Agent 1 for the collision), otherwise returns None
         agent1_prev_loc = get_location(path1, t-1)
         agent2_prev_loc = get_location(path2, t-1)
         agent1_curr_loc = get_location(path1, t)
@@ -23,7 +20,6 @@ def detect_collision(path1, path2):
         if agent1_prev_loc == agent2_curr_loc and agent2_prev_loc == agent1_curr_loc:
             return {'loc': [agent1_prev_loc, agent1_curr_loc], 'timestep': t}
         return None
-
     # Check for vertex collision at the starting location
     if vertex_collision(t=0) is not None:
         return vertex_collision(t=0)
@@ -76,13 +72,8 @@ def disjoint_splitting(collision):
     pass
 
 class CBSSolver(object):
-    """The high-level search of CBS."""
     [NORMAL, DIAGNOSTIC] = [0, 1]  # Modes
     def __init__(self, my_map, starts, goals):
-        """my_map   - list of lists specifying obstacle positions
-        starts      - [(x1, y1), (x2, y2), ...] list of start locations
-        goals       - [(x1, y1), (x2, y2), ...] list of goal locations
-        """
         self.mode = CBSSolver.NORMAL
         self.my_map = my_map
         self.starts = starts
@@ -98,20 +89,17 @@ class CBSSolver(object):
         self.heuristics = []
         for goal in self.goals:
             self.heuristics.append(compute_heuristics(my_map, goal))    
-
     def push_node(self, node):
         heapq.heappush(self.open_list, (node['cost'], len(node['collisions']), self.num_of_generated, node))
         if self.mode == CBSSolver.DIAGNOSTIC:
             print(">> Generate node {}".format(self.num_of_generated))
         self.num_of_generated += 1
-
     def pop_node(self):
         _, _, id, node = heapq.heappop(self.open_list)
         self.num_of_expanded += 1
         if self.mode == CBSSolver.DIAGNOSTIC:
             print("\n> Expand node {}\n====================".format(id))
         return node
-
     def print_node(self, node):
         print("Paths:")
         for agent,path in enumerate(node['paths']):
@@ -120,22 +108,12 @@ class CBSSolver(object):
         print(node['collisions'][0] if node['collisions'] else 'No Collisions!')
         print("\nConstraints for Collision[0]:")
         print(node['constraints'])
-
     def find_solution(self, disjoint=True, mode=None):
-        """ Finds paths for all agents from their start locations to their goal locations
-
-        disjoint    - use disjoint splitting or not
-        """
         if mode is None:
             self.mode = CBSSolver.NORMAL
         else:
             self.mode = mode
         self.start_time = timer.time()
-        # Generate the root node
-        # constraints   - list of constraints
-        # paths         - list of paths, one for each agent
-        #               [[(x11, y11), (x12, y12), ...], [(x21, y21), (x22, y22), ...], ...]
-        # collisions     - list of collisions in paths
         root = {'cost': 0,
                 'constraints': [],
                 'paths': [],
@@ -184,12 +162,3 @@ class CBSSolver(object):
 
     def print_results(self, node):
         pass
-        #print("\n Found a solution! \n")
-        '''print("Constraints:")
-        for constraint in node['constraints']:
-            print(constraint)
-        CPU_time = timer.time() - self.start_time
-        print("\nCPU time (s):    {:.2f}".format(CPU_time))
-        print("Sum of costs:    {}".format(get_sum_of_cost(node['paths'])))
-        print("Expanded nodes:  {}".format(self.num_of_expanded))
-        print("Generated nodes: {}".format(self.num_of_generated))'''
