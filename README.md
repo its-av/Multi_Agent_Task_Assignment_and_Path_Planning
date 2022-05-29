@@ -1,6 +1,6 @@
 # Multi_Agent_Task_Assignment_&_Path_Planning
  
- The Multi-agent Task Assignment and Path Plan- ning problem is a well-known warehouse problem in which a collection of robots is tasked with carrying products from one area to another. It appears in the context of automated warehouse logistics and automated mail sortation, and it necessitates first
+ The Multi-agent Task Assignment and Path Plan-ning problem is a well-known warehouse problem in which a collection of robots is tasked with carrying products from one area to another. It appears in the context of automated warehouse logistics and automated mail sortation, and it necessitates first
   determining which robot is assigned to which task 
   (i.e., Task Assignment or TA), then a subsequent
    coordination problem in which each robot must be 
