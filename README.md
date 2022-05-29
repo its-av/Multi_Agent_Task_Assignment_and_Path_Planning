@@ -14,6 +14,9 @@ Note:
 > requires python 3.8
 
 >Open the code folder
+
 >Open the terminal
+
 >type 'python runner.py' and hit enter
+
 >Simulation will start keep on closing closing windows in order to see the simulation of the next case
