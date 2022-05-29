@@ -9,9 +9,11 @@
    Paths should be found for numerous agents, each with a different start and target point, 
    so that agents do not collide in the multi agent path finding problem (MAPF). 
 
-How to run :-
 Note: 
 > requires python 3.8
+
+How to run :-
+
 
 >Open the code folder
 
